@@ -1,0 +1,175 @@
+---
+doc: prd
+status: draft
+---
+
+# SysPlanner (working name) — Product Requirements
+
+A single-user web app for someone with ambitious, multi-week goals who drifts without a system. You enter a goal and a deadline, the AI builds the system and a right-sized day-by-day plan, you tick off what you get done, and the plan reshapes itself when you don't.
+Source: `scope.md > The Unique Kernel`, `scope.md > Who It's For`. "SysPlanner" is a working name; the learner wants to revisit it once the project is ready (see **Open Questions**).
+
+## The Core Journey
+Source: `scope.md > The Core Loop`, `scope.md > What "Working" Looks Like`.
+
+1. **First open.** Before anything else, the user enters how many hours a week they can work (e.g. 40 or 60). This is the time budget all goals share.
+   Then the screen is empty apart from an **Add goal** button and the (empty) **Active Goals** panel on the left.
+2. **Add a goal.** Clicking **Add goal** asks for two things together: the goal (e.g. "Build 16 products by the end of 2026") and its deadline.
+3. **Feasibility check.** The AI judges the goal against the deadline.
+   - **Impossible:** it says clearly that the deadline is too short for this goal and asks for a new deadline. This repeats until the deadline is realistic. The goal is not added until then.
+   - **Stretch or comfortable:** it goes ahead.
+4. **System is built.** The goal appears in **Active Goals**. Its system has two parts: a **breakdown** (the kinds of ongoing work the goal needs and how much time each gets) and a **day-by-day plan** to completion, sized to what the goal needs rather than stretched to the deadline.
+5. **More goals.** The user adds up to **3** active goals, one at a time. Adding a goal re-plans the existing goals too, so all plans fit the weekly budget together. Any existing goal whose plan changes gets a **Last change** note. Trying to add a 4th is refused.
+6. **Today.** On a normal open, the main area shows **Today**: every task due today across all active goals. Each task shows what to do, its done criterion, a time estimate, and why it moves the goal forward.
+7. **Mark wins.** During or at the end of the day, the user ticks tasks they finished. They never mark a task as missed.
+8. **Next day → review.** Clicking **Next day** first opens a **review of today** listing every task still unticked: "Tick any you actually did." The user ticks any they forgot.
+9. **Re-plan.** Whatever is still unticked counts as missed. The AI re-plans each affected goal from the next day onward. That can be a simple one-day shift or a deeper reshape (rebalance, cut, compress), whichever the goal needs.
+10. **See what changed.** Each re-planned goal shows a **Last change** note saying exactly what the AI did, e.g. "Shifted Days 6–14 back by one day; deadline still met."
+11. **Repeat.** The main area now shows the new day's Today list. The loop continues.
+
+**Success (the demo):** add the 16-products goal plus two more, get refused on a 4th, see a believable breakdown and plan with a "why" on every task, tick some tasks, leave one unticked, click Next day, and watch the **Last change** note explain how the plan reshaped.
+
+## Screens and Layout
+
+One main screen with a persistent left panel. The main area switches between views.
+
+- **Active Goals panel (left, always visible).** Lists active goals (max 3) and holds the **Add goal** button. Clicking a goal opens its **Goal view**. There is also a way back to **Today**.
+- **Today view (main area, default).** Today's tasks from all active goals, each with a tick box. Holds the **Next day** control.
+- **Goal view (main area).** One goal's full system: the goal and deadline, the **breakdown**, the **day-by-day plan**, and the **Last change** note.
+- **Weekly hours (first-open step).** Asked once, before the first goal: hours available per week.
+- **Add goal (form/dialog).** Goal text and deadline, plus the feasibility response (impossible → new-deadline prompt).
+- **End-of-day review (dialog/step).** Shown after clicking **Next day**: the unticked tasks with tick boxes and a confirm action that triggers the re-plan.
+- **Empty state.** Before any goal exists, the main area is a clear prompt to add your first goal.
+
+## Look and Feel
+
+Reference: screenshots of a third-party app ("Yggdrasil") the learner shared **for colors, contrast and vibe only**. Do **not** reuse its name, tree logo, branding or layouts. This app's UI must come from its own function.
+
+- **Colors:** very dark forest-green background; slightly lighter green cards/surfaces; muted sage green for secondary labels and calm accents; gold for highlights (active item, key dates, emphasis); off-white primary text. High contrast between text and background.
+- **Typography character:** an elegant serif for page titles and headings; a clean sans-serif for body text; small labels in spaced-out capitals.
+- **Style:** quiet, reflective, premium. Rounded cards with thin, subtle borders; generous spacing; left-sidebar navigation with a clear gold marker on the active item.
+- **Tone:** never guilt-inducing. A missed day is just an input to re-planning (`scope.md > Inspiration & Identity`). Avoid red failure states, streak-shaming or loud alerts.
+
+## Features and Behavior
+
+### Weekly Time Budget
+Source: `scope.md > The Unique Kernel` (plans goals together).
+
+- On first open, before any goal can be added, the user enters their available work hours per week.
+- All active goals' plans together must fit within that weekly budget.
+  - [ ] On first open, the hours question appears before **Add goal** is usable.
+  - [ ] The combined daily time estimates across all active goals stay within the weekly budget.
+- *(Assumption: set once and not editable in the POC.)*
+
+### Adding a Goal
+Source: `scope.md > The POC Boundary`.
+
+- Clicking **Add goal** asks for the goal text and a deadline together. The deadline is required.
+- The AI checks feasibility before building anything.
+  - [ ] An obviously impossible goal (e.g. "16 products in 3 days") gets a clear message that the deadline is too short, and the user is asked for a new deadline.
+  - [ ] A new deadline that is still impossible gets the same message again.
+  - [ ] The goal does not appear in **Active Goals** until a realistic deadline is accepted.
+  - [ ] A stretch goal (hard but doable) is planned normally.
+
+### Goal Cap
+Source: `scope.md > The Unique Kernel` ("caps them").
+
+- Maximum **3** active goals.
+  - [ ] With 3 goals active, trying to add a 4th is refused with a plain message. No goal is added.
+  - [ ] There is no way to remove or finish a goal to make room in the POC.
+
+### The System (Breakdown + Day-by-Day Plan)
+Source: `scope.md > Goal vs. System`, `scope.md > The Unique Kernel`.
+
+- **Breakdown:** the ongoing kinds of work the goal needs and the time each gets (e.g. for 16 products: Build 3 hrs/day, Ship and post 30 min/day, Pick next idea 20 min/day). It's shown on screen because it gives the user confidence in the plan.
+- **Day-by-day plan:** every day from start to completion. Each task has what to do, a done criterion, a time estimate and a why.
+- The plan is sized to the goal, not the deadline: if the goal needs 10 days, the plan is 10 days.
+- The AI surfaces long-lead or easy-to-miss steps (e.g. things that depend on other people).
+- Plans are made jointly: each goal's plan accounts for the other active goals, and shared work is combined where the AI sees it (best effort).
+- **Adding a goal reworks existing plans** to fit everything into the weekly budget. The AI decides how much to change, which may be nothing if there's room.
+  - [ ] Opening a goal shows both its breakdown (work types with time amounts) and its day-by-day plan.
+  - [ ] Every task in the plan has a done criterion, a time estimate and a why that connects it to the goal.
+  - [ ] For the 16-products goal (deadline end of 2026), the plan visibly works toward 16 products, roughly one every 5–6 days.
+  - [ ] After adding a second goal, any change to the first goal's plan is described in its **Last change** note.
+
+### Today and Marking Done
+Source: `scope.md > The Core Loop` (Morning, Evening).
+
+- **Today** is the default view and lists today's tasks from all active goals, each labelled with its goal.
+- The user only ever ticks tasks as **done**. An unticked task is treated as not done.
+  - [ ] Opening the app with goals shows Today's tasks across all active goals.
+  - [ ] Ticking a task visibly marks it done.
+  - [ ] There is no "mark missed" control.
+
+### Next Day, Review and Re-plan
+Source: `scope.md > The Core Loop` (Missed it?), `scope.md > The POC Boundary` (simulated day advance).
+
+- **Next day** simulates the passing of a day, so the demo doesn't wait for real time.
+- Before advancing, an **end-of-day review** lists all still-unticked tasks so the user can tick any they did but forgot. This protects against needless re-plans.
+- After confirming, every task still unticked counts as missed, and the AI re-plans each affected goal from the next day on. A goal with no missed tasks is not re-planned.
+- The AI decides how much change is needed: a simple shift is a valid outcome.
+  - [ ] Clicking **Next day** with unticked tasks shows the review before anything changes.
+  - [ ] Ticking a task in the review prevents it from triggering a re-plan.
+  - [ ] After confirming, the main area shows the new day's tasks.
+  - [ ] A goal's plan changes after a missed task, even if the change is only a shift.
+
+### Last Change Note
+- Each goal shows a **Last change** note describing what the most recent re-plan did (after a miss, or after another goal was added), in plain words, whether it was a simple shift or a deeper reshape.
+  - [ ] After a re-plan, the affected goal's **Last change** note says what changed (which days or tasks moved, were cut, compressed or rebalanced) and whether the deadline is still met.
+  - [ ] A goal that has never been re-planned shows no last-change content (or an equivalent "no changes yet").
+
+## States and Boundaries
+
+- **First use / empty:** weekly hours asked first; then no goals; a prompt plus **Add goal** button; Active Goals panel empty.
+- **Planning in progress:** while the AI builds or re-plans a system, the user sees that it's working. *(Assumption: some visible working indicator; wording/style left to spec.)*
+- **Impossible deadline:** clear message plus new-deadline prompt, repeating until realistic (see **Adding a Goal**).
+- **At cap:** a 4th goal is refused.
+- **Review with nothing unticked:** *(Assumption: if every task is ticked, Next day advances straight to the new day with no review and no re-plan.)*
+- **AI unavailable or fails:** *(Assumption: show a calm error saying planning failed, with a retry. Nothing is added or changed.)*
+
+## Product Decisions
+
+- **"System" = everything for a goal:** breakdown plus day-by-day plan. Breakdown is visible because it builds confidence in the steps.
+- **Today across all goals is the home view; clicking a goal opens its system.** Carried from the scope's morning loop.
+- **Users only mark wins.** No "mark missed": unticked means not done, which keeps it guilt-free.
+- **End-of-day review on Next day instead of notifications.** It catches forgotten ticks before re-planning. Notifications stay in Later (hard to demo, and out of scope).
+- **Re-plans are always visible, even simple shifts,** through a **Last change** note per goal. Chosen over a re-plan counter, which only shows that a change happened, not what changed.
+- **Cap of 3 active goals,** a plain refusal beyond that, and no remove/finish in the POC. Based on focus advice (1–3 goals) and the scope's "a couple."
+- **Impossible goals are never added.** The user re-enters a deadline until it's realistic. Stretch goals are fine.
+- **One weekly hours number, entered at first open before any goal,** so the AI plans all goals against a known time limit.
+- **Adding a goal reworks existing plans** rather than giving the new goal only leftover time. It's more practical, and the extra AI call is a small cost at 3 goals.
+- **No bulk add.** With rework, adding one at a time reaches the same joint plan, and bulk would complicate the feasibility loop.
+- **Working name: SysPlanner,** to be revisited once the project is ready. Noted concerns: "sys" can read as IT jargon, and "planner" undersells that the tool does the planning.
+
+## What We're Building
+- Add goal with required deadline; AI feasibility check with the impossible → re-enter loop.
+- AI-built system per goal: breakdown with time amounts and a day-by-day plan (done criterion, time estimate, why per task), sized to the goal and planned jointly across active goals.
+- Active Goals panel (max 3) with a refusal on the 4th.
+- Today view across goals with done-ticking.
+- Next day control, end-of-day review, AI re-plan of affected goals.
+- Last change note per goal.
+- The dark-green/sage/gold look described above.
+
+## Deferred From the POC
+- **Removing, completing or archiving goals:** the demo never needs to free a slot.
+- **Notifications and reminders:** replaced by the end-of-day review; `scope.md > Later`.
+- **Dedicated shared-work merging logic:** the AI does it best effort; `scope.md > Later`.
+- **Accounts, other users, sharing:** single user; `scope.md > Later`.
+- **Public hosted version:** clone-and-run with your own API key; `scope.md > Later`.
+- **Re-plan history beyond the last change:** only the latest note is kept visible.
+- **Adding goals in bulk:** rework on add already produces the joint plan; bulk adds a second form and a messier feasibility check.
+
+## Possible Later Enhancements
+- A re-plan history or counter per goal, to spot goals that keep slipping (worded so it doesn't feel like a guilt score).
+- The AI suggesting a realistic deadline when one is impossible.
+- Editing a goal or its deadline after it's planned.
+- Changing the weekly hours later (with a re-plan).
+
+## Non-Goals
+- **Real-time day passing:** can't be demoed; replaced by Next day (`scope.md > Explicitly Cut`).
+- **Manual system editing:** the tool owns the system; the user shouldn't have to rethink it (`scope.md > The Unique Kernel`).
+- **Copying the reference app:** colors and vibe only, not its name, logo or layouts.
+- **Streaks, failure counts or shame mechanics:** contrary to the guilt-free intent.
+
+## Open Questions
+- **Data across sessions (can wait for spec, but confirm intent).** Assumed: goals, plans and progress are still there when the app is closed and reopened.
+- **Final app name:** working name is SysPlanner. **Reminder: revisit the name once the build is working, before `6-ship`.** Does not block spec.
