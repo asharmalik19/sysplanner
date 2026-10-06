@@ -17,18 +17,16 @@ Source: `scope.md > The Core Loop`, `scope.md > What "Working" Looks Like`.
 3. **Feasibility check.** The AI judges the goal against the deadline.
    - **Impossible:** it says clearly that the deadline is too short for this goal and asks for a new deadline. This repeats until the deadline is realistic. The goal is not added until then.
    - **Stretch or comfortable:** it goes ahead.
-4. **System is built as a draft.** The goal appears in **Active Goals** marked as a **draft**. Its system has two parts: a **breakdown** (the kinds of ongoing work the goal needs and how much time each gets) and a **day-by-day plan** to completion, sized to what the goal needs rather than stretched to the deadline.
-5. **Refine with feedback.** The user reviews the draft and, if anything is off, types feedback in a simple text box: any information or context that would help the AI plan better (e.g. "I can't build on weekends"). The AI rebuilds the system with it. This can repeat as often as needed.
-6. **Commit.** When the system looks right, the user commits to it. Only now does the goal become active: its tasks start appearing in **Today**, and any rework of other goals that adding it caused is applied. After commit, no more feedback; only daily re-planning changes it.
-7. **More goals.** The user adds up to **3** goals, one at a time. Adding a goal re-plans the existing goals too, so all plans fit the weekly budget together. Any existing goal whose plan changes gets a **Last change** note. Trying to add a 4th is refused.
-8. **Today.** On a normal open, the main area shows **Today**: every task due today across all active goals. Each task shows what to do, its done criterion, a time estimate, and why it moves the goal forward.
-9. **Mark wins.** During or at the end of the day, the user ticks tasks they finished. They never mark a task as missed.
-10. **Next day → review.** Clicking **Next day** first opens a **review of today** listing every task still unticked: "Tick any you actually did." The user ticks any they forgot.
-11. **Re-plan.** Whatever is still unticked counts as missed. The AI re-plans each affected goal from the next day onward. That can be a simple one-day shift or a deeper reshape (rebalance, cut, compress), whichever the goal needs.
-12. **See what changed.** Each re-planned goal shows a **Last change** note saying exactly what the AI did, e.g. "Shifted Days 6–14 back by one day; deadline still met."
-13. **Repeat.** The main area now shows the new day's Today list. The loop continues.
+4. **System is built.** The goal appears in **Active Goals**. Its system has two parts: a **breakdown** (the kinds of ongoing work the goal needs and how much time each gets) and a **day-by-day plan** to completion, sized to what the goal needs rather than stretched to the deadline.
+5. **More goals.** The user adds up to **3** active goals, one at a time. Adding a goal re-plans the existing goals too, so all plans fit the weekly budget together. Any existing goal whose plan changes gets a **Last change** note. Trying to add a 4th is refused.
+6. **Today.** On a normal open, the main area shows **Today**: every task due today across all active goals. Each task shows what to do, its done criterion, a time estimate, and why it moves the goal forward.
+7. **Mark wins.** During or at the end of the day, the user ticks tasks they finished. They never mark a task as missed.
+8. **Next day → review.** Clicking **Next day** first opens a **review of today** listing every task still unticked: "Tick any you actually did." The user ticks any they forgot.
+9. **Re-plan.** Whatever is still unticked counts as missed. The AI re-plans each affected goal from the next day onward. That can be a simple one-day shift or a deeper reshape (rebalance, cut, compress), whichever the goal needs.
+10. **See what changed.** Each re-planned goal shows a **Last change** note saying exactly what the AI did, e.g. "Shifted Days 6–14 back by one day; deadline still met."
+11. **Repeat.** The main area now shows the new day's Today list. The loop continues.
 
-**Success (the demo):** add the 16-products goal, give feedback once and commit, add two more, get refused on a 4th, see a believable breakdown and plan with a "why" on every task, tick some tasks, leave one unticked, click Next day, and watch the **Last change** note explain how the plan reshaped.
+**Success (the demo):** add the 16-products goal plus two more, get refused on a 4th, see a believable breakdown and plan with a "why" on every task, tick some tasks, leave one unticked, click Next day, and watch the **Last change** note explain how the plan reshaped.
 
 ## Screens and Layout
 
@@ -36,7 +34,7 @@ One main screen with a persistent left panel. The main area switches between vie
 
 - **Active Goals panel (left, always visible).** Lists active goals (max 3) and holds the **Add goal** button. Clicking a goal opens its **Goal view**. There is also a way back to **Today**.
 - **Today view (main area, default).** Today's tasks from all active goals, each with a tick box. Holds the **Next day** control.
-- **Goal view (main area).** One goal's full system: the goal and deadline, the **breakdown**, the **day-by-day plan**, and the **Last change** note. For a **draft** goal it also shows the **feedback box** and the **Commit** action.
+- **Goal view (main area).** One goal's full system: the goal and deadline, the **breakdown**, the **day-by-day plan**, and the **Last change** note.
 - **Weekly hours (first-open step).** Asked once, before the first goal: hours available per week.
 - **Add goal (form/dialog).** Goal text and deadline, plus the feasibility response (impossible → new-deadline prompt).
 - **End-of-day review (dialog/step).** Shown after clicking **Next day**: the unticked tasks with tick boxes and a confirm action that triggers the re-plan.
@@ -93,20 +91,6 @@ Source: `scope.md > Goal vs. System`, `scope.md > The Unique Kernel`.
   - [ ] For the 16-products goal (deadline end of 2026), the plan visibly works toward 16 products, roughly one every 5–6 days.
   - [ ] After adding a second goal, any change to the first goal's plan is described in its **Last change** note.
 
-### Feedback and Commit
-Source: `scope.md > The Unique Kernel` (the tool owns the system), learner decision during `4-spec`.
-
-- A newly built system is a **draft**. The user can give free-text feedback (any information or context) and the AI rebuilds the draft with it, as many times as needed.
-- **Commit** turns the draft into an active goal. Only then do its tasks appear in **Today**.
-- Only **one draft** at a time, and a draft **counts toward the 3-goal cap**.
-- A draft is planned jointly with committed goals, but any rework of committed goals is only **previewed** while drafting and **applied on commit**, so refining never shifts plans already being followed.
-- After commit, no feedback box: the system changes only through daily re-planning.
-  - [ ] A new goal's system is shown as a draft with a feedback box and a Commit action.
-  - [ ] Submitting feedback rebuilds the draft, and the new draft reflects the feedback.
-  - [ ] A draft's tasks never appear in **Today**.
-  - [ ] After Commit, the goal's tasks appear in **Today**, the feedback box is gone, and any affected committed goals show a **Last change** note.
-  - [ ] With 2 committed goals and 1 draft, adding another goal is refused.
-
 ### Today and Marking Done
 Source: `scope.md > The Core Loop` (Morning, Evening).
 
@@ -139,7 +123,6 @@ Source: `scope.md > The Core Loop` (Missed it?), `scope.md > The POC Boundary` (
 - **Planning in progress:** while the AI builds or re-plans a system, the user sees that it's working. *(Assumption: some visible working indicator; wording/style left to spec.)*
 - **Impossible deadline:** clear message plus new-deadline prompt, repeating until realistic (see **Adding a Goal**).
 - **At cap:** a 4th goal is refused.
-- **Draft in progress:** the goal is marked as a draft in **Active Goals**; while a draft exists, **Add goal** is unavailable.
 - **Review with nothing unticked:** *(Assumption: if every task is ticked, Next day advances straight to the new day with no review and no re-plan.)*
 - **AI unavailable or fails:** *(Assumption: show a calm error saying planning failed, with a retry. Nothing is added or changed.)*
 
@@ -151,7 +134,6 @@ Source: `scope.md > The Core Loop` (Missed it?), `scope.md > The POC Boundary` (
 - **End-of-day review on Next day instead of notifications.** It catches forgotten ticks before re-planning. Notifications stay in Later (hard to demo, and out of scope).
 - **Re-plans are always visible, even simple shifts,** through a **Last change** note per goal. Chosen over a re-plan counter, which only shows that a change happened, not what changed.
 - **Cap of 3 active goals,** a plain refusal beyond that, and no remove/finish in the POC. Based on focus advice (1–3 goals) and the scope's "a couple."
-- **Feedback before commit, not after.** A new system is a draft the user can refine with free-text feedback, then commits to. After commit only daily re-planning changes it. Chosen because the AI's first plan may miss context only the user has, and the user needs confidence in the steps; limited to one text box (no task editing, no chat thread). Built last in the POC.
 - **Impossible goals are never added.** The user re-enters a deadline until it's realistic. Stretch goals are fine.
 - **One weekly hours number, entered at first open before any goal,** so the AI plans all goals against a known time limit.
 - **Adding a goal reworks existing plans** rather than giving the new goal only leftover time. It's more practical, and the extra AI call is a small cost at 3 goals.
@@ -160,7 +142,6 @@ Source: `scope.md > The Core Loop` (Missed it?), `scope.md > The POC Boundary` (
 
 ## What We're Building
 - Add goal with required deadline; AI feasibility check with the impossible → re-enter loop.
-- Draft → feedback → commit for each new goal's system.
 - AI-built system per goal: breakdown with time amounts and a day-by-day plan (done criterion, time estimate, why per task), sized to the goal and planned jointly across active goals.
 - Active Goals panel (max 3) with a refusal on the 4th.
 - Today view across goals with done-ticking.
@@ -175,6 +156,7 @@ Source: `scope.md > The Core Loop` (Missed it?), `scope.md > The POC Boundary` (
 - **Accounts, other users, sharing:** single user; `scope.md > Later`.
 - **Public hosted version:** clone-and-run with your own API key; `scope.md > Later`.
 - **Re-plan history beyond the last change:** only the latest note is kept visible.
+- **Feedback on a new system before committing to it:** a draft goal you refine with free-text feedback, then commit. Discussed in `4-spec` and deferred because the draft state complicated the cap, Next day and joint re-planning for the POC.
 - **Adding goals in bulk:** rework on add already produces the joint plan; bulk adds a second form and a messier feasibility check.
 
 ## Possible Later Enhancements
@@ -185,7 +167,7 @@ Source: `scope.md > The Core Loop` (Missed it?), `scope.md > The POC Boundary` (
 
 ## Non-Goals
 - **Real-time day passing:** can't be demoed; replaced by Next day (`scope.md > Explicitly Cut`).
-- **Manual system editing:** the tool owns the system; the user shouldn't have to rethink it (`scope.md > The Unique Kernel`). Free-text feedback on a draft is not manual editing: the AI still builds the system.
+- **Manual system editing:** the tool owns the system; the user shouldn't have to rethink it (`scope.md > The Unique Kernel`).
 - **Copying the reference app:** colors and vibe only, not its name, logo or layouts.
 - **Streaks, failure counts or shame mechanics:** contrary to the guilt-free intent.
 
